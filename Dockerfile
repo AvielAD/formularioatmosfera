@@ -11,5 +11,7 @@ RUN npm install
 # RUN npm ci --omit=dev
 # Bundle app source
 COPY . .
+#Prisma client
+RUN npx prisma generate
 EXPOSE 3000
 CMD [ "npm", "start" ]
