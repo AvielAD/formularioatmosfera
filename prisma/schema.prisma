@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model alumno {
+  id                 Int                  @id @default(autoincrement())
+  email              String?              @db.VarChar(250)
+  nombre             String?              @db.VarChar(250)
+  apellidop          String?              @db.VarChar(250)
+  apellidom          String?              @db.VarChar(250)
+  descripcion        String?              @db.VarChar(250)
+  eventocurso_alumno eventocurso_alumno[]
+}
+
+model codigodescuento {
+  id          Int           @id @default(autoincrement())
+  nombre      String?       @db.VarChar(250)
+  codigo      String?       @db.VarChar(50)
+  descuento   Decimal?      @db.Money
+  eventocurso eventocurso[]
+}
+
+model curso {
+  id          Int           @id @default(autoincrement())
+  nombre      String?       @db.VarChar(250)
+  descripcion String?       @db.VarChar(250)
+  temario     String?       @db.VarChar(250)
+  costo       Decimal?      @db.Money
+  eventocurso eventocurso[]
+}
+
+model eventocurso {
+  id                   Int                  @id @default(autoincrement())
+  idcurso              Int?
+  idcodigodescuento    Int?
+  fechainiciopromocion DateTime?            @db.Timestamptz(6)
+  fechafinpromocion    DateTime?            @db.Timestamptz(6)
+  fechainicio          DateTime?            @db.Timestamptz(6)
+  totalcurso           Decimal?             @db.Money
+  codigodescuento      codigodescuento?     @relation(fields: [idcodigodescuento], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  curso                curso?               @relation(fields: [idcurso], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  eventocurso_alumno   eventocurso_alumno[]
+}
+
+model eventocurso_alumno {
+  idalumno      Int
+  ideventocurso Int
+  alumno        alumno      @relation(fields: [idalumno], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  eventocurso   eventocurso @relation(fields: [ideventocurso], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([idalumno, ideventocurso])
+}
