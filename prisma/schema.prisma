@@ -18,11 +18,11 @@ model alumno {
 }
 
 model codigodescuento {
-  id          Int           @id @default(autoincrement())
-  nombre      String?       @db.VarChar(250)
-  codigo      String?       @db.VarChar(50)
-  descuento   Decimal?      @db.Money
-  eventocurso eventocurso[]
+  id                 Int                  @id @default(autoincrement())
+  nombre             String?              @db.VarChar(250)
+  codigo             String?              @db.VarChar(50)
+  descuento          Decimal?             @db.Money
+  eventocurso_alumno eventocurso_alumno[]
 }
 
 model curso {
@@ -37,21 +37,22 @@ model curso {
 model eventocurso {
   id                   Int                  @id @default(autoincrement())
   idcurso              Int?
-  idcodigodescuento    Int?
   fechainiciopromocion DateTime?            @db.Timestamptz(6)
   fechafinpromocion    DateTime?            @db.Timestamptz(6)
   fechainicio          DateTime?            @db.Timestamptz(6)
-  totalcurso           Decimal?             @db.Money
-  codigodescuento      codigodescuento?     @relation(fields: [idcodigodescuento], references: [id], onDelete: NoAction, onUpdate: NoAction)
   curso                curso?               @relation(fields: [idcurso], references: [id], onDelete: NoAction, onUpdate: NoAction)
   eventocurso_alumno   eventocurso_alumno[]
 }
 
 model eventocurso_alumno {
-  idalumno      Int
-  ideventocurso Int
-  alumno        alumno      @relation(fields: [idalumno], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  eventocurso   eventocurso @relation(fields: [ideventocurso], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  idalumno          Int
+  ideventocurso     Int
+  fechainscripcion  DateTime?        @db.Timestamptz(6)
+  costo             Decimal?         @db.Money
+  idcodigodescuento Int?
+  alumno            alumno           @relation(fields: [idalumno], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  eventocurso       eventocurso      @relation(fields: [ideventocurso], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  codigodescuento   codigodescuento? @relation(fields: [idcodigodescuento], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_eventocursoalumno_codigodescuento")
 
   @@id([idalumno, ideventocurso])
 }

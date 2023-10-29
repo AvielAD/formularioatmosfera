@@ -4,5 +4,6 @@ export interface Alumno{
     apellidop: string,
     apellidom: string,
     descripcion: string,
-    ideventocurso: number
+    ideventocurso: number,
+    codigodescuento: string
 }
