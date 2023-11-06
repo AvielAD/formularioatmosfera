@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["views"]
 }
 
 datasource db {
@@ -88,4 +89,14 @@ model usuario {
   idcategoriausuario Int?
   email              String?           @unique(map: "unique_email") @db.VarChar(250)
   categoriausuario   categoriausuario? @relation(fields: [idcategoriausuario], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_usuario_categoriausuario")
+}
+
+view informacioninscritos {
+  id          Int       @unique
+  nombre      String?   @db.VarChar(250)
+  apellidop   String?   @db.VarChar(250)
+  curso       String?   @db.VarChar(250)
+  inicio      DateTime? @db.Timestamptz(6)
+  inscripcion DateTime? @db.Timestamptz(6)
+  costo       Decimal?  @db.Money
 }
