@@ -56,3 +56,36 @@ model eventocurso_alumno {
 
   @@id([idalumno, ideventocurso])
 }
+
+model categoriausuario {
+  id                          Int                           @id @default(autoincrement())
+  nombre                      String?                       @db.VarChar(250)
+  categoriausuario_rolusuario categoriausuario_rolusuario[]
+  usuario                     usuario[]
+}
+
+model categoriausuario_rolusuario {
+  idcategoriausuario Int
+  idrolusuario       Int
+  categoriausuario   categoriausuario @relation(fields: [idcategoriausuario], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_categoriauruaiorolusuario_categoriausuario")
+  rolusuario         rolusuario       @relation(fields: [idrolusuario], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_categoriauruaiorolusuario_rolusuario")
+
+  @@id([idcategoriausuario, idrolusuario])
+}
+
+model rolusuario {
+  id                          Int                           @id @default(autoincrement())
+  nombre                      String?                       @db.VarChar(250)
+  codigo                      String?                       @db.VarChar(20)
+  categoriausuario_rolusuario categoriausuario_rolusuario[]
+}
+
+model usuario {
+  id                 Int               @id @default(autoincrement())
+  nombre             String?           @db.VarChar(250)
+  apellido           String?           @db.VarChar(250)
+  passkey            String?
+  idcategoriausuario Int?
+  email              String?           @unique(map: "unique_email") @db.VarChar(250)
+  categoriausuario   categoriausuario? @relation(fields: [idcategoriausuario], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_usuario_categoriausuario")
+}
