@@ -18,7 +18,10 @@ export const VerifyToken = async (req: Request, res: Response, next:NextFunction
     const serverresponse:ServerResponseDTO = {message:"", succeeded:false}
     try {
         //Verificar token valido
-        const token =  req.headers['authorization']
+        //console.log(req.cookies.token)
+
+        let token  =  req.cookies.token
+        
         if(!token) 
             return res.status(401).json({message:"Unauthorized"});
         //if(SecretKeyPass!=="")
