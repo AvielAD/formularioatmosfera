@@ -41,7 +41,9 @@ model eventocurso {
   fechainiciopromocion DateTime?            @db.Timestamptz(6)
   fechafinpromocion    DateTime?            @db.Timestamptz(6)
   fechainicio          DateTime?            @db.Timestamptz(6)
+  idestadoeventocurso  Int                  @default(1)
   curso                curso?               @relation(fields: [idcurso], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  estadoeventocurso    estadoeventocurso    @relation(fields: [idestadoeventocurso], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_eventocurso_estadoeventocurso")
   eventocurso_alumno   eventocurso_alumno[]
 }
 
@@ -91,6 +93,13 @@ model usuario {
   categoriausuario   categoriausuario? @relation(fields: [idcategoriausuario], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_usuario_categoriausuario")
 }
 
+model estadoeventocurso {
+  id          Int           @id @default(autoincrement())
+  nombre      String?       @db.VarChar(100)
+  codigo      String?       @db.VarChar(50)
+  eventocurso eventocurso[]
+}
+
 view informacioninscritos {
   id          Int       @unique
   nombre      String?   @db.VarChar(250)
@@ -99,4 +108,16 @@ view informacioninscritos {
   inicio      DateTime? @db.Timestamptz(6)
   inscripcion DateTime? @db.Timestamptz(6)
   costo       Decimal?  @db.Money
+}
+
+view eventosview {
+  id              Int       @unique
+  curso           String?   @db.VarChar(250)
+  temario         String?   @db.VarChar(250)
+  costo           Decimal?  @db.Money
+  iniciopromocion DateTime? @db.Timestamptz(6)
+  finpromocion    DateTime? @db.Timestamptz(6)
+  inicio          DateTime? @db.Timestamptz(6)
+  estado          String?   @db.VarChar(100)
+
 }
