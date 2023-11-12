@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt, {Secret} from 'jsonwebtoken'
-import { ServerResponseDTO } from "../../../Dtos/ServerResponse/ServerResponse.dto";
+import { ServerResponseDTOAuth } from "../dtos/ServerResponse.dto";
 import {PrismaClient} from '@prisma/client'
 import {CategoryUser} from '../enums/auth.enum'
 const SecretKeyPass:Secret = process.env.KEYSECRET || ""
@@ -15,19 +15,18 @@ const prisma = new PrismaClient();
  * @returns 
  */
 export const VerifyToken = async (req: Request, res: Response, next:NextFunction)=>{
-    const serverresponse:ServerResponseDTO = {message:"", succeeded:false}
+    const serverresponse:ServerResponseDTOAuth = {message:"", succeeded:false}
     try {
         //Verificar token valido
-        //console.log(req.cookies.token)
-
-        let token  =  req.cookies.token
-        
+        const token =  req.cookies.token
         if(!token) 
             return res.status(401).json({message:"Unauthorized"});
         //if(SecretKeyPass!=="")
         const decode:any =jwt.verify(token, SecretKeyPass)
         //verificar usuario valido
         const response =await HasUserValid(decode.id)
+        req.body.IdUser = decode.id
+
         if(response){
             next()
         }
@@ -45,16 +44,17 @@ export const VerifyToken = async (req: Request, res: Response, next:NextFunction
 }
 
 export const isAdmin =async (req:Request, res:Response, next: NextFunction)=>{
-    const serverresponse:ServerResponseDTO = {message:"", succeeded:false}
-    const idcategory = req.body.idcategoriausuario
+    const serverresponse:ServerResponseDTOAuth = {message:"", succeeded:false}
+    const IdUser = req.body.IdUser
     //Buscar categoria usuario
     try {
-        const categoryuser = await prisma.categoriausuario.findFirst({
+
+        const user = await prisma.usuario.findFirst({
             where:{
-                id: idcategory 
+                id: IdUser 
             }
         })
-        if(categoryuser!=null && categoryuser.id == CategoryUser.CAT001){
+        if(user!=null && user.idcategoriausuario == CategoryUser.CAT001){
             next()
         }
         else{
@@ -72,16 +72,16 @@ export const isAdmin =async (req:Request, res:Response, next: NextFunction)=>{
 }
 
 export const isModerator =async (req:Request, res:Response, next: NextFunction)=>{
-    const serverresponse:ServerResponseDTO = {message:"", succeeded:false}
-    const idcategory = req.body.idcategoriausuario
+    const serverresponse:ServerResponseDTOAuth = {message:"", succeeded:false}
+    const IdUser = req.body.IdUser
     //Buscar categoria usuario
     try {
-        const categoryuser = await prisma.categoriausuario.findFirst({
+        const user = await prisma.usuario.findFirst({
             where:{
-                id: idcategory 
+                id: IdUser 
             }
         })
-        if(categoryuser!=null && categoryuser.id == CategoryUser.CAT002){
+        if(user!=null && user.id == CategoryUser.CAT002){
             next()
         }
         else{
