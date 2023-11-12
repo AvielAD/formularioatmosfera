@@ -1,23 +1,42 @@
 import { Request, Response } from "express";
+import * as CtrlService from '../Libs/Services/eventos/eventos.service'
+import { EventoCurso, EventoCursoUpdate } from "../Dtos/eventocurso/eventocurso.dto";
 
+export const GetEventoCursos = async (req: Request, res: Response) => {
+    const result = await CtrlService.GetEventoCursos()
 
-export const GetEventoCursos = async (request: Request, response: Response) => {
-
-    response.status(200).json({})
+    res.status(200).json(result)
 }
 
-export const AddEventoCursos = async (request: Request, response: Response) => {
+export const AddEventoCurso = async (req: Request, res: Response) => {
+    const newCurso: EventoCurso = req.body
 
-    response.status(200).json({})
+    const result = await CtrlService.AddEventoCurso(newCurso);
+    if (result != null && result.succeeded)
+        res.status(200).json(result)
+    else
+        res.status(400).json(result)
+
 }
 
-export const UpdateEventoCursos = async (request: Request, response: Response) => {
+export const UpdateEventoCurso = async (req: Request, res: Response) => {
+    const updateCurso: EventoCursoUpdate = req.body
 
-    response.status(200).json({})
+    const result = await CtrlService.UpdateEventoCurso(updateCurso);
+    if (result != null && result.succeeded)
+        res.status(200).json(result)
+    else
+        res.status(400).json(result)
 }
 
-export const DeleteEventoCursos = async (request: Request, response: Response) => {
+export const DeleteEventoCurso = async (req: Request, res: Response) => {
+    const id:string = String( req.query.id) ?? "0"
 
-    response.status(200).json({})
+    const IdCurso = parseInt(id)
+    const result = await CtrlService.DeleteEventoCurso(IdCurso);
+    if (result != null && result.succeeded)
+        res.status(200).json(result)
+    else
+        res.status(400).json(result)
 }
 

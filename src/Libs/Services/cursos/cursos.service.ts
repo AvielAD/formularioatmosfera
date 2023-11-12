@@ -9,7 +9,7 @@ export const GetCursos = async () => {
 
 export const AddCurso = async (curso: Curso) => {
     const response: ServerResponse = { message: "", succeeded: false }
-    if (curso.nombre == null && curso.nombre === "") {
+    if (curso.nombre == null || curso.nombre === "") {
         response.message = "Campo nombre obligatorio"
         response.succeeded = false
         return response
@@ -85,7 +85,5 @@ export const DeleteCurso = async (id: number) => {
             response.succeeded = false
             return response
         }
-
-
     }
 }

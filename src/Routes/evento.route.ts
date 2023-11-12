@@ -3,9 +3,9 @@ import * as CtrlEventos from '../Controllers/evento.controller'
 import * as CtrlJwt from '../Libs/middleware/auth/authjwt.middleware'
 const router = Router()
 
-router.get('/eventos', [CtrlJwt.VerifyToken, CtrlJwt.isAdmin], CtrlEventos.GetEventoCursos)
-router.post('/eventos', [CtrlJwt.VerifyToken, CtrlJwt.isAdmin], CtrlEventos.AddEventoCursos)
-router.put('/eventos', [CtrlJwt.VerifyToken, CtrlJwt.isAdmin], CtrlEventos.UpdateEventoCursos)
-router.delete('/eventos', [CtrlJwt.VerifyToken, CtrlJwt.isAdmin], CtrlEventos.DeleteEventoCursos)
+router.get('/evento', [CtrlJwt.VerifyToken, CtrlJwt.isAdmin], CtrlEventos.GetEventoCursos)
+router.post('/evento', [CtrlJwt.VerifyToken, CtrlJwt.isAdmin], CtrlEventos.AddEventoCurso)
+router.put('/evento', [CtrlJwt.VerifyToken, CtrlJwt.isAdmin], CtrlEventos.UpdateEventoCurso)
+router.delete('/evento', [CtrlJwt.VerifyToken, CtrlJwt.isAdmin], CtrlEventos.DeleteEventoCurso)
 
 export default router
