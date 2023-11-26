@@ -18,9 +18,12 @@ export const VerifyToken = async (req: Request, res: Response, next:NextFunction
     const serverresponse:ServerResponseDTOAuth = {message:"", succeeded:false}
     try {
         //Verificar token valido
-        const token =  req.cookies.token
-        if(!token) 
-            return res.status(401).json({message:"Unauthorized"});
+        const token =  req.headers.authorization?.split(" ")[1]
+        if(!token){
+            serverresponse.message="No Autorizado"
+            serverresponse.succeeded=false
+            return res.status(401).json(serverresponse);
+        }
         //if(SecretKeyPass!=="")
         const decode:any =jwt.verify(token, SecretKeyPass)
         //verificar usuario valido
