@@ -5,7 +5,7 @@ const prisma = new PrismaClient()
 
 export const GetEventoCursos = async ()=>{
     try {
-        const result = await prisma.eventocurso.findMany()
+        const result = await prisma.eventosview.findMany()
         return result
     } catch (error) {
         return []
