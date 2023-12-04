@@ -18,7 +18,7 @@ export const InscribirAlumno = async (Alumno: Alumno): Promise<boolean> => {
         //buscar eventocurso por ideventocurso obtener costo total
         const evento_curso = await prisma.eventocurso.findFirst({
             where: {
-                id: Alumno.ideventocurso
+                uuidpage: Alumno.ideventocurso
             },
             include: {
                 curso: true,
@@ -48,7 +48,7 @@ export const InscribirAlumno = async (Alumno: Alumno): Promise<boolean> => {
             await prisma.eventocurso_alumno.create({
                 data: {
                     idalumno: alumnoregistrado.id,
-                    ideventocurso: Alumno.ideventocurso,
+                    ideventocurso: evento_curso.id,
                     idcodigodescuento: codigodescuento?.id,
                     costo: costoTotal,
                     fechainscripcion: fechaHoy.toDate()

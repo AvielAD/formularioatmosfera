@@ -6,7 +6,8 @@ SELECT
   e.fechainiciopromocion AS iniciopromocion,
   e.fechafinpromocion AS finpromocion,
   e.fechainicio AS inicio,
-  e2.nombre AS estado
+  e2.nombre AS estado,
+  e.uuidpage AS uuid
 FROM
   (
     (

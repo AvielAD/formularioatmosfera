@@ -29,7 +29,6 @@ export const VerifyToken = async (req: Request, res: Response, next:NextFunction
         //verificar usuario valido
         const response =await HasUserValid(decode.id)
         req.body.IdUser = decode.id
-
         if(response){
             next()
         }

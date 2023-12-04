@@ -42,6 +42,7 @@ model eventocurso {
   fechafinpromocion    DateTime?            @db.Timestamptz(6)
   fechainicio          DateTime?            @db.Timestamptz(6)
   idestadoeventocurso  Int                  @default(1)
+  uuidpage             String               @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   curso                curso?               @relation(fields: [idcurso], references: [id], onDelete: NoAction, onUpdate: NoAction)
   estadoeventocurso    estadoeventocurso    @relation(fields: [idestadoeventocurso], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_eventocurso_estadoeventocurso")
   eventocurso_alumno   eventocurso_alumno[]
@@ -119,5 +120,5 @@ view eventosview {
   finpromocion    DateTime? @db.Timestamptz(6)
   inicio          DateTime? @db.Timestamptz(6)
   estado          String?   @db.VarChar(100)
-
+  uuid            String?   @db.Uuid
 }
