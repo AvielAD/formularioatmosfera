@@ -11,3 +11,16 @@ export const ListInscritos = async ()=>{
         return []
     }
 }
+
+export const GetInscritoById= async (id: string)=>{
+    try {
+        const inscrito = await prisma.eventosview.findFirst({
+            where:{
+                uuid: id
+            }
+        })
+        return inscrito
+    } catch (error) {
+        return null
+    }
+}

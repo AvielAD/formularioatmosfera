@@ -10,7 +10,12 @@ export const ListInscritos = async (request: Request, response: Response) => {
     response.status(200).json(Inscritos)
 }
 
-export const test = (request: Request, response: Response) => {
-    console.log('Hola')
-    response.json({ message: 'Mensaje ok test in controller' })
+export const GetInscritoById = async (req: Request, res: Response) => {
+    const id:string = String( req.query.id) ?? "0"
+
+    const result = await CtrlRepository.GetInscritoById(id);
+    if (result != null)
+        res.status(200).json(result)
+    else
+        res.status(400).json(result)
 }
