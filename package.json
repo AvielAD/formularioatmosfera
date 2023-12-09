@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@prisma/client": "^5.5.2",
+    "@prisma/client": "^5.7.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
@@ -20,7 +20,7 @@
     "mongoose": "^7.6.3",
     "pg": "^8.11.3",
     "pg-hstore": "^2.3.4",
-    "prisma": "^5.5.2",
+    "prisma": "^5.7.0",
     "sequelize": "^6.33.0"
   },
   "devDependencies": {

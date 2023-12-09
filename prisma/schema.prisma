@@ -121,4 +121,5 @@ view eventosview {
   inicio          DateTime? @db.Timestamptz(6)
   estado          String?   @db.VarChar(100)
   uuid            String?   @db.Uuid
+  inscritos       Int?
 }
