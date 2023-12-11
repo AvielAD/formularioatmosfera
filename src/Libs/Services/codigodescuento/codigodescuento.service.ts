@@ -8,7 +8,7 @@ export const GetCodigoDescuento = async () => {
 
 export const AddCodigoDescuento = async (codigo: codigodescuento) => {
     const response: ServerResponse = { message: "", succeeded: false }
-    if (codigo.nombre == null || codigo.nombre === "") {
+    if (codigo.codigo == null || codigo.codigo === "") {
         response.message = "Campo nombre obligatorio"
         response.succeeded = false
         return response
@@ -16,12 +16,12 @@ export const AddCodigoDescuento = async (codigo: codigodescuento) => {
     else {
         var result = await CtrlRepository.AddCodigoDescuento(codigo)
         if (result) {
-            response.message = "Curso agregado correctamente"
+            response.message = "Codigo de descuento agregado correctamente"
             response.succeeded = true
             return response
         }
         else {
-            response.message = "Error al agregar el curso"
+            response.message = "Error al agregar el Codigo de descuento"
             response.succeeded = false
             return response
         }
