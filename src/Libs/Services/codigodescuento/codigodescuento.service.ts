@@ -1,4 +1,4 @@
-import { codigodescuento, codigodescuentoupdate } from '../../../Dtos/codigodescuento/codigodescuento.dto'
+import { codigodescuento } from '../../../Dtos/codigodescuento/codigodescuento.dto'
 import { ServerResponse } from '../../../Types/ServerResponse.type'
 import * as CtrlRepository from '../../Repositories/codigodescuento/codigodescuento.repository'
 

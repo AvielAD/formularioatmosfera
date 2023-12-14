@@ -21,7 +21,7 @@ model alumno {
 model codigodescuento {
   id                 Int                  @id @default(autoincrement())
   nombre             String?              @db.VarChar(250)
-  codigo             String?              @db.VarChar(50)
+  codigo             String?              @unique(map: "unique_codigo") @db.VarChar(50)
   descuento          Decimal?             @db.Money
   eventocurso_alumno eventocurso_alumno[]
 }
@@ -36,16 +36,20 @@ model curso {
 }
 
 model eventocurso {
-  id                   Int                  @id @default(autoincrement())
-  idcurso              Int?
+  id                   Int                  @unique(map: "uniqueid") @default(autoincrement())
+  idcurso              Int
   fechainiciopromocion DateTime?            @db.Timestamptz(6)
   fechafinpromocion    DateTime?            @db.Timestamptz(6)
   fechainicio          DateTime?            @db.Timestamptz(6)
   idestadoeventocurso  Int                  @default(1)
   uuidpage             String               @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  curso                curso?               @relation(fields: [idcurso], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  idusuario            Int                  @default(3)
+  curso                curso                @relation(fields: [idcurso], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_eventocurso_curso")
   estadoeventocurso    estadoeventocurso    @relation(fields: [idestadoeventocurso], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_eventocurso_estadoeventocurso")
+  usuario              usuario              @relation(fields: [idusuario], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_eventocurso_user")
   eventocurso_alumno   eventocurso_alumno[]
+
+  @@id([id, idcurso, idestadoeventocurso, idusuario])
 }
 
 model eventocurso_alumno {
@@ -54,9 +58,9 @@ model eventocurso_alumno {
   fechainscripcion  DateTime?        @db.Timestamptz(6)
   costo             Decimal?         @db.Money
   idcodigodescuento Int?
-  alumno            alumno           @relation(fields: [idalumno], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  eventocurso       eventocurso      @relation(fields: [ideventocurso], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  alumno            alumno           @relation(fields: [idalumno], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_eventocursoalumno_alumno")
   codigodescuento   codigodescuento? @relation(fields: [idcodigodescuento], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_eventocursoalumno_codigodescuento")
+  eventocurso       eventocurso      @relation(fields: [ideventocurso], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_eventocursoalumno_eventocurso")
 
   @@id([idalumno, ideventocurso])
 }
@@ -91,6 +95,7 @@ model usuario {
   passkey            String?
   idcategoriausuario Int?
   email              String?           @unique(map: "unique_email") @db.VarChar(250)
+  eventocurso        eventocurso[]
   categoriausuario   categoriausuario? @relation(fields: [idcategoriausuario], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_usuario_categoriausuario")
 }
 

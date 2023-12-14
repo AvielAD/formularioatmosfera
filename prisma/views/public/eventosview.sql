@@ -26,4 +26,10 @@ GROUP BY
   c.nombre,
   c.temario,
   c.costo,
-  e2.nombre;
+  e2.nombre,
+  e.fechainiciopromocion,
+  e.fechafinpromocion,
+  e.fechainicio,
+  e.uuidpage
+ORDER BY
+  ((count(ea.ideventocurso)) :: integer) DESC;
