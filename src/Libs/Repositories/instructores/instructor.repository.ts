@@ -8,7 +8,7 @@ const prisma = new PrismaClient()
 
 export const GetInstructores = async () => {
     try {
-        const result = await prisma.usuario.findFirst({
+        const result = await prisma.usuario.findMany({
             where:{
                 idcategoriausuario: categoriasusuario.Instructor
             },
