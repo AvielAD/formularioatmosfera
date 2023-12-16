@@ -11,6 +11,11 @@ export const GetInstructores = async () => {
         const result = await prisma.usuario.findFirst({
             where:{
                 idcategoriausuario: categoriasusuario.Instructor
+            },
+            select:{
+                nombre: true,
+                apellido: true,
+                email: true,
             }
         })
         return result
