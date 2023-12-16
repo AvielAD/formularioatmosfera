@@ -13,6 +13,7 @@ export const GetInstructores = async () => {
                 idcategoriausuario: categoriasusuario.Instructor
             },
             select:{
+                id: true,
                 nombre: true,
                 apellido: true,
                 email: true,
