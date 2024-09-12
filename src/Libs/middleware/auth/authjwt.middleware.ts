@@ -1,118 +1,25 @@
-import { Request, Response, NextFunction } from "express";
-import jwt, {Secret} from 'jsonwebtoken'
-import { ServerResponseDTOAuth } from "../dtos/ServerResponse.dto";
-import {PrismaClient} from '@prisma/client'
-import {CategoryUser} from '../enums/auth.enum'
-const SecretKeyPass:Secret = process.env.KEYSECRET || ""
-const prisma = new PrismaClient();
+import { NextFunction, Request, Response } from "express";
 
-/**
- * Validar Usuario
- * Validar Token autenticacion
- * @param req 
- * @param res 
- * @param next 
- * @returns 
- */
-export const VerifyToken = async (req: Request, res: Response, next:NextFunction)=>{
-    const serverresponse:ServerResponseDTOAuth = {message:"", succeeded:false}
+export const VerifyToken = async(req: Request, res: Response, next: NextFunction)=>{
     try {
-        //Verificar token valido
         const token =  req.headers.authorization?.split(" ")[1]
         if(!token){
-            serverresponse.message="No Autorizado"
-            serverresponse.succeeded=false
-            return res.status(401).json(serverresponse);
+           return res.status(401).json([])
         }
-        //if(SecretKeyPass!=="")
-        const decode:any =jwt.verify(token, SecretKeyPass)
-        //verificar usuario valido
-        const response =await HasUserValid(decode.id)
-        req.body.IdUser = decode.id
-        if(response){
-            next()
-        }
-        else{
-            serverresponse.message= "No Autorizado"
-            serverresponse.succeeded=false
-            return res.status(401).json(serverresponse);
-        }
-
-    } catch (error) {
-        serverresponse.message= "No Autorizado"
-        serverresponse.succeeded=false
-        return res.status(401).json(serverresponse);
-    }
-}
-
-export const isAdmin =async (req:Request, res:Response, next: NextFunction)=>{
-    const serverresponse:ServerResponseDTOAuth = {message:"", succeeded:false}
-    const IdUser = req.body.IdUser
-    //Buscar categoria usuario
-    try {
-
-        const user = await prisma.usuario.findFirst({
-            where:{
-                id: IdUser 
+        //efectuar llamado desde axios
+        const response = await fetch(`${process.env.AUTH_API}/api/user`,{
+            headers:{
+                "Authorization": `Bearer ${token}`
             }
         })
-        if(user!=null && user.idcategoriausuario == CategoryUser.CAT001){
+        
+        if(response.status == 200){
             next()
         }
-        else{
-            serverresponse.message= "No Autorizado"
-            serverresponse.succeeded=false
-            return res.status(401).json(serverresponse);
+        else {
+           return res.status(401).json([])
         }
-            
     } catch (error) {
-        serverresponse.message= "No Autorizado"
-        serverresponse.succeeded=false
-        return res.status(401).json(serverresponse);
-    
-    }
-}
-
-export const isModerator =async (req:Request, res:Response, next: NextFunction)=>{
-    const serverresponse:ServerResponseDTOAuth = {message:"", succeeded:false}
-    const IdUser = req.body.IdUser
-    //Buscar categoria usuario
-    try {
-        const user = await prisma.usuario.findFirst({
-            where:{
-                id: IdUser 
-            }
-        })
-        if(user!=null && user.id == CategoryUser.CAT002){
-            next()
-        }
-        else{
-            serverresponse.message= "No Autorizado"
-            serverresponse.succeeded=false
-            return res.status(401).json(serverresponse);
-        }
-            
-    } catch (error) {
-        serverresponse.message= "No Autorizado"
-        serverresponse.succeeded=false
-        return res.status(401).json(serverresponse);
-    
-    }
-}
-
-
-const HasUserValid = async(IdUsuario: number)=>{
-    try {
-        const searchUser = await prisma.usuario.findFirst({
-            where:{
-                id: IdUsuario
-            }
-        })
-        if(searchUser!=null)
-            return true
-        else
-            return false
-    } catch (error) {
-        return false
+        return res.status(401).json([])
     }
 }
