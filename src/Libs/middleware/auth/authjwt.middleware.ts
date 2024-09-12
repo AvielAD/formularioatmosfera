@@ -12,7 +12,7 @@ export const VerifyToken = async(req: Request, res: Response, next: NextFunction
                 "Authorization": `Bearer ${token}`
             }
         })
-        
+        console.log(response)
         if(response.status == 200){
             next()
         }
